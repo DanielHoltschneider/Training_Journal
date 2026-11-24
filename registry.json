@@ -1,0 +1,35 @@
+{
+  "registry_version": 7,
+  "tables": {
+    "attempts": {
+      "description": "One row per route attempted in a session.",
+      "also_known_as": ["climbs", "send log", "routes done"],
+      "columns": {
+        "route_name": {"type": "text", "description": "Name or color/tag of the route", "also_known_as": ["route", "problem"]},
+        "grade_raw":  {"type": "text", "description": "Grade as written, e.g. V4, 5.10a"},
+        "grade_num":  {"type": "number", "description": "Numeric grade for charting", "derived": true},
+        "result":     {"type": "text", "allowed_values": ["send", "flash", "fall", "project"]},
+        "attempts":   {"type": "number", "description": "Number of tries"},
+        "feel":       {"type": "number", "description": "How it felt, 1-5"},
+        "mistakes":   {"type": "text", "also_known_as": ["errors"]},
+        "notes":      {"type": "text"}
+      }
+    },
+    "warmups": {
+      "description": "Warm-up exercises, on or off the wall.",
+      "also_known_as": ["warm up", "warm-up"],
+      "columns": {
+        "type":     {"type": "text", "allowed_values": ["on_wall", "off_wall"]},
+        "exercise": {"type": "text"},
+        "reps":     {"type": "number"},
+        "duration_min": {"type": "number"},
+        "notes":    {"type": "text"}
+      }
+    }
+  },
+  "rules": {
+    "allowed_types": ["text", "number", "boolean", "date"],
+    "name_pattern": "^[a-z][a-z0-9_]{1,40}$",
+    "every_new_table_must_have": ["session_id"]
+  }
+}

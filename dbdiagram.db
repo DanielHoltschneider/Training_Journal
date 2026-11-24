@@ -1,0 +1,111 @@
+Enum setting {
+  indoor
+  outdoor
+}
+
+Enum rock_type {
+  granite
+  limestone
+  sandstone
+  gritstone
+  basalt
+  quartzite
+  conglomerate
+  other
+}
+
+Enum part_type {
+  warm_up
+  bouldering
+  top_rope
+  lead
+  board
+  cool_down
+}
+
+Enum discipline {
+  boulder
+  sport
+  trad
+  top_rope
+}
+
+Enum grade_system {
+  v_scale
+  yds
+}
+
+Enum attempt_result {
+  send
+  flash
+  fall
+  project
+}
+
+Table locations {
+  id integer [pk, increment]
+  name varchar [not null, note: 'e.g. gym name, crag name']
+  setting setting [not null]
+  rock_type rock_type [note: 'Outdoor only, leave null for indoor']
+  region varchar [note: 'City, area, or state']
+  notes text
+}
+
+Table sessions {
+  id integer [pk, increment]
+  date date [not null]
+  location_id integer [not null]
+  summary text [note: 'Paragraph summary from the page']
+  notes text [note: 'Anything else: conditions, body, mindset']
+}
+
+Table parts {
+  id integer [pk, increment]
+  session_id integer [not null]
+  position integer [note: 'Order within the session, 1 = first']
+  type part_type [not null]
+  length_min integer
+  quality integer [note: '1-5, where 1 = terrible and 5 = great']
+  feel_notes text [note: 'How this part felt and why']
+  notes text
+}
+
+Table exercises {
+  id integer [pk, increment]
+  part_id integer [not null]
+  name varchar [not null, note: 'e.g. hangs, band work, easy traverse']
+  sets integer
+  reps integer
+  duration_min integer
+  notes text
+}
+
+Table routes {
+  id integer [pk, increment]
+  location_id integer [not null]
+  name varchar [not null]
+  discipline discipline [not null]
+  grade_system grade_system [not null]
+  grade_raw varchar [not null, note: 'As written, e.g. V4 or 5.10a']
+  grade_num decimal [note: 'Derived by code, used for charting']
+  notes text [note: 'About the route itself: holds, style, beta']
+}
+
+Table attempts {
+  id integer [pk, increment]
+  part_id integer [not null]
+  route_id integer [not null]
+  result attempt_result [not null]
+  tries integer [default: 1]
+  feel integer [note: '1-5, where 1 = awful and 5 = great']
+  feel_notes text [note: 'How the attempt felt']
+  mistakes text
+  notes text
+}
+
+Ref: sessions.location_id > locations.id
+Ref: parts.session_id > sessions.id
+Ref: exercises.part_id > parts.id
+Ref: routes.location_id > locations.id
+Ref: attempts.part_id > parts.id
+Ref: attempts.route_id > routes.id
