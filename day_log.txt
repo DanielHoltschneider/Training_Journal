@@ -1,0 +1,5 @@
+11/24/2026 - Day 1
+  used claude to reason between using a sql or no sql model for storing data.
+    - decided with a sql model because powerbi deals with relational tables and it would be a pain otherwise
+  decided on implemtation: using a schema registy to keep track of tables.
+  
